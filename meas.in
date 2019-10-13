@@ -1,0 +1,114 @@
+./main 0 10000 100000000
+cdf size = 73590334
+artificial
+cdf_size: 73590334
+spline_size: 10000
+Errors for spline - (average, max): (40.8359, 405.289)
+
+natural
+cdf_size: 73590334
+spline_size: 9987
+Errors for spline - (average, max): (37.3719, 95)
+
+random
+cdf_size: 73590334
+spline_size: 10000
+Errors for spline - (average, max): (644.487, 832354)
+
+blocked
+cdf_size: 73590334
+spline_size: 10000
+Errors for spline - (average, max): (71.9735, 266911)
+
+anti
+cdf_size: 73590334
+spline_size: 10000
+Errors for spline - (average, max): (71.9735, 266911)
+
+withCdf
+cdf_size: 73590334
+spline_size: 7626
+Errors for spline - (average, max): (48.3641, 666.992)
+
+withMerge
+cdf_size: 73590334
+spline_size: 8464
+Errors for spline - (average, max): (49.1768, 660.365)
+
+-----------------------------------------------------
+
+./main 0 5000 5000
+cdf size = 9999
+artificial
+cdf_size: 9999
+spline_size: 5000
+Errors for spline - (average, max): (0.249975, 0.5)
+
+natural
+cdf_size: 9999
+spline_size: 3334
+Errors for spline - (average, max): (0.666517, 1)
+
+random
+cdf_size: 9999
+spline_size: 4900
+Errors for spline - (average, max): (402.043, 92137.9)
+
+blocked
+cdf_size: 9999
+spline_size: 5184
+Errors for spline - (average, max): (901.929, 169351)
+
+anti
+cdf_size: 9999
+spline_size: 5184
+Errors for spline - (average, max): (901.929, 169351)
+
+withCdf
+cdf_size: 9999
+spline_size: 4
+Errors for spline - (average, max): (2.08229e+06, 3.12375e+06)
+
+withMerge
+cdf_size: 9999
+spline_size: 4
+Errors for spline - (average, max): (2.08229e+06, 3.12375e+06)
+-------------------------------------------------------------
+
+./main 0 5000 20000
+cdf size = 39962
+artificial
+cdf_size: 39962
+spline_size: 5000
+Errors for spline - (average, max): (17.26, 166.634)
+
+natural
+cdf_size: 39962
+spline_size: 4922
+Errors for spline - (average, max): (13.9327, 38)
+
+random
+cdf_size: 39962
+spline_size: 4900
+Errors for spline - (average, max): (3514.89, 448238)
+
+blocked
+cdf_size: 39962
+spline_size: 5184
+Errors for spline - (average, max): (591.574, 187241)
+
+anti
+cdf_size: 39962
+spline_size: 5184
+Errors for spline - (average, max): (591.574, 187241)
+
+withCdf
+cdf_size: 39962
+spline_size: 3240
+Errors for spline - (average, max): (39.6317, 642.406)
+
+withMerge
+cdf_size: 39962
+spline_size: 4554
+Errors for spline - (average, max): (28.3896, 297.589)
+
