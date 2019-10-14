@@ -10,3 +10,5 @@ By merging different ideas (*) into a robust approach, we attain a good-enough a
 
 Milestones:
 1) Try different variants of the approximation of CDF by using only n spline knots, i.e, sqrt(size(X + Y)).
+2) Decide to keep only the artificial method - take all the sums of type X[index] + Y[index] as support points for CDF.
+3) Try to supress the duplicates in the CDF of X + Y, by using a hash-table. In this way, we obtain the final order faster and in a more comfortable way. 
