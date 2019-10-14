@@ -1,0 +1,272 @@
+./main 0 10000 100000000
+cdf size = 73584136
+artificial
+cdf_size: 73584136
+spline_size: 10000
+Errors for spline - (average, max): (25.3891, 245.062)
+
+natural
+cdf_size: 73584136
+spline_size: 10020
+Errors for spline - (average, max): (23.592, 60)
+
+random
+cdf_size: 73584136
+spline_size: 10000
+Errors for spline - (average, max): (32.2776, 175631)
+
+blocked
+cdf_size: 73584136
+spline_size: 10000
+Errors for spline - (average, max): (51.1236, 201188)
+
+anti
+cdf_size: 73584136
+spline_size: 10000
+Errors for spline - (average, max): (88.5746, 603048)
+
+withCdf
+cdf_size: 73584136
+spline_size: 8740
+Errors for spline - (average, max): (29.2024, 1390.41)
+
+withMerge
+cdf_size: 73584136
+spline_size: 8460
+Errors for spline - (average, max): (33.5231, 3228.49)
+
+-----------------------------------------------------
+
+./main 0 5000 1000000
+cdf size = 1916973
+artificial
+cdf_size: 1916973
+spline_size: 5000
+Errors for spline - (average, max): (0.335411, 28.6838)
+
+natural
+cdf_size: 1916973
+spline_size: 3078
+Errors for spline - (average, max): (1.32391, 3)
+
+random
+cdf_size: 1916973
+spline_size: 4897
+Errors for spline - (average, max): (51.0481, 20732.1)
+
+blocked
+cdf_size: 1916973
+spline_size: 5169
+Errors for spline - (average, max): (6.23047, 8624.39)
+
+anti
+cdf_size: 1916973
+spline_size: 5169
+Errors for spline - (average, max): (6.34641, 9027.74)
+
+withCdf
+cdf_size: 1916973
+spline_size: 3076
+Errors for spline - (average, max): (6.17853, 985.007)
+
+withMerge
+cdf_size: 1916973
+spline_size: 3657
+Errors for spline - (average, max): (6.80197, 718.748)
+
+--------------------------------------------------------
+
+./main 0 5000 1000000000
+cdf size = 24799804
+artificial
+cdf_size: 24799804
+spline_size: 5000
+Errors for spline - (average, max): (29.2338, 225.591)
+
+natural
+cdf_size: 24799804
+spline_size: 4999
+Errors for spline - (average, max): (25.9334, 66)
+
+random
+cdf_size: 24799804
+spline_size: 4900
+Errors for spline - (average, max): (42.9999, 152044)
+
+blocked
+cdf_size: 24799804
+spline_size: 5184
+Errors for spline - (average, max): (30.8518, 58872.6)
+
+anti
+cdf_size: 24799804
+spline_size: 5184
+Errors for spline - (average, max): (33.0011, 143041)
+
+withCdf
+cdf_size: 24799804
+spline_size: 4060
+Errors for spline - (average, max): (32.4896, 614.077)
+
+withMerge
+cdf_size: 24799804
+spline_size: 3808
+Errors for spline - (average, max): (34.5107, 387.095)
+
+--------------------------------------------------------
+
+./main 0 5000 2000000000
+cdf size = 24901197
+artificial
+cdf_size: 24901197
+spline_size: 5000
+Errors for spline - (average, max): (29.5121, 341.043)
+
+natural
+cdf_size: 24901197
+spline_size: 4923
+Errors for spline - (average, max): (26.3989, 67)
+
+random
+cdf_size: 24901197
+spline_size: 4900
+Errors for spline - (average, max): (42.6394, 148242)
+
+blocked
+cdf_size: 24901197
+spline_size: 5184
+Errors for spline - (average, max): (32.6614, 58531.5)
+
+anti
+cdf_size: 24901197
+spline_size: 5184
+Errors for spline - (average, max): (33.6087, 93516.3)
+
+withCdf
+cdf_size: 24901197
+spline_size: 3843
+Errors for spline - (average, max): (33.1848, 523.585)
+
+withMerge
+cdf_size: 24901197
+spline_size: 4352
+Errors for spline - (average, max): (31.8409, 708.145)
+
+------------------------------------------------------
+
+./main 0 5000 200000
+cdf size = 397270
+artificial
+cdf_size: 397270
+spline_size: 5000
+Errors for spline - (average, max): (0.0309982, 8.96386)
+
+natural
+cdf_size: 397270
+spline_size: 2392
+Errors for spline - (average, max): (0, 0)
+
+random
+cdf_size: 397270
+spline_size: 4849
+Errors for spline - (average, max): (3.25734, 1381.64)
+
+blocked
+cdf_size: 397270
+spline_size: 5137
+Errors for spline - (average, max): (1.76069, 1075.92)
+
+anti
+cdf_size: 397270
+spline_size: 5137
+Errors for spline - (average, max): (1.76403, 1078.74)
+
+withCdf
+cdf_size: 397270
+spline_size: 3570
+Errors for spline - (average, max): (0.337108, 124.5)
+
+withMerge
+cdf_size: 397270
+spline_size: 4258
+Errors for spline - (average, max): (0.502802, 152.131)
+
+------------------------------------------------------
+
+./main 0 10000 200000
+cdf size = 399347
+artificial
+cdf_size: 399347
+spline_size: 10000
+Errors for spline - (average, max): (0.00421954, 6.53061)
+
+natural
+cdf_size: 399347
+spline_size: 554
+Errors for spline - (average, max): (0, 0)
+
+random
+cdf_size: 399347
+spline_size: 9825
+Errors for spline - (average, max): (0.768743, 302.978)
+
+blocked
+cdf_size: 399347
+spline_size: 9770
+Errors for spline - (average, max): (0.533014, 307)
+
+anti
+cdf_size: 399347
+spline_size: 9770
+Errors for spline - (average, max): (0.533014, 307)
+
+withCdf
+cdf_size: 399347
+spline_size: 7971
+Errors for spline - (average, max): (0.426227, 141.313)
+
+withMerge
+cdf_size: 399347
+spline_size: 9645
+Errors for spline - (average, max): (0.169045, 97.9947)
+
+----------------------------------------------------------
+
+./main 0 10000 20000000
+cdf size = 32081012
+artificial
+cdf_size: 32081012
+spline_size: 10000
+Errors for spline - (average, max): (5.78066, 89.3561)
+
+natural
+cdf_size: 32081012
+spline_size: 9551
+Errors for spline - (average, max): (7.46056, 19)
+
+random
+cdf_size: 32081012
+spline_size: 10000
+Errors for spline - (average, max): (18.4854, 140628)
+
+blocked
+cdf_size: 32081012
+spline_size: 9996
+Errors for spline - (average, max): (55.2549, 181299)
+
+anti
+cdf_size: 32081012
+spline_size: 9996
+Errors for spline - (average, max): (77.2404, 286585)
+
+withCdf
+cdf_size: 32081012
+spline_size: 9119
+Errors for spline - (average, max): (9.68178, 1311.21)
+
+withMerge
+cdf_size: 32081012
+spline_size: 8461
+Errors for spline - (average, max): (11.6173, 1786.87)
+
+-----------------------------------------------------

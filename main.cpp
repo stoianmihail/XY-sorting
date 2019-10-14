@@ -46,11 +46,16 @@ std::vector<Coord> buildBlocked(const char* msg, std::vector<uint32_t>& xs, std:
     std::cerr << msg << std::endl;
     assert(xs.size() == ys.size());
     
+    std::unordered_map<uint32_t, bool> seen;
+    
     unsigned limit = static_cast<unsigned>(sqrt(MAX_N));
     for (unsigned index = 0; index < MAX_N; ++index) {
         if (index % limit) continue;
         for (unsigned ptr = 0; ptr < MAX_N; ++ptr) {
             if (ptr % limit == 0) {
+                uint32_t sum = xs[index] + ys[ptr];
+                if (seen[sum]) continue;
+                seen[sum] = true;
                 ts.push_back(cdf[getIndex(xs[index] + ys[ptr])]);
             }
         }
@@ -85,8 +90,14 @@ std::vector<Coord> buildAnti(const char* msg, std::vector<uint32_t>& xs, std::ve
     std::cerr << msg << std::endl;
     assert(xs.size() == ys.size());
     uint32_t currPtr = 0;
+    
+    
+    std::unordered_map<uint32_t, bool> seen;
+    
     for (unsigned index = 0; index < MAX_N; ++index) {
         unsigned currSum = xs[index] + ys[MAX_N - index - 1];
+        if (seen[currSum]) continue;
+        seen[currSum] = true;
         ts.push_back(cdf[getIndex(currSum)]);
     }
     ts.push_back(cdf.front());
@@ -121,8 +132,14 @@ std::vector<Coord> buildWithCdf(const char* msg, std::vector<uint32_t>& xs, std:
     std::vector<Coord> xs_spline = util::compressFunc(xs_cdf, desired);
     std::vector<Coord> ys_spline = util::compressFunc(ys_cdf, desired);
     
+    
+    std::unordered_map<uint32_t, bool> seen;
+    
     for (auto x_elem: xs_spline) {
         for (auto y_elem: ys_spline) {
+            uint32_t sum = x_elem.first + y_elem.first;
+            if (seen[sum]) continue;
+            seen[sum] = true;
             ts.push_back(cdf[getIndex(x_elem.first + y_elem.first)]);
         }
     }
@@ -158,8 +175,14 @@ std::vector<Coord> buildWithMerge(const char* msg, std::vector<uint32_t>& xs, st
     std::vector<Coord> xs_spline = util::compressFunc(xs_cdf, desired);
     std::vector<Coord> ys_spline = util::compressFunc(ys_cdf, desired);
     
+    
+    std::unordered_map<uint32_t, bool> seen;
+    
     for (auto x_elem: xs_spline) {
         for (auto y_elem: ys_spline) {
+            uint32_t sum = x_elem.first + y_elem.first;
+            if (seen[sum]) continue;
+            seen[sum] = true;
             ts.push_back(cdf[getIndex(x_elem.first + y_elem.first)]);
         }
     }
@@ -192,9 +215,15 @@ std::vector<Coord> buildRandom(const char* msg, std::vector<uint32_t>& xs, std::
     random_shuffle(secondOrder.begin(), secondOrder.end());
     
     
+    std::unordered_map<uint32_t, bool> seen;
+    
     unsigned limit = static_cast<unsigned>(sqrt(MAX_N));
     for (unsigned index = 0; index < limit; ++index) {
         for (unsigned ptr = 0; ptr < limit; ++ptr) {
+            uint32_t sum = xs[firstOrder[index]] + 
+                ys[secondOrder[ptr]];
+            if (seen[sum]) continue;
+            seen[sum] = true;
             ts.push_back(cdf[getIndex(
                 xs[firstOrder[index]] + 
                 ys[secondOrder[ptr]]
@@ -281,9 +310,14 @@ int main(int argc, char** argv) {
     printVector("Y", ys);
 #endif
     
+    std::unordered_map<uint32_t, bool> seen;
     sums.reserve(xs.size() * ys.size());
     for (unsigned index = 0; index < xs.size(); ++index) {
         for (unsigned ptr = 0; ptr < ys.size(); ++ptr) {
+            uint32_t sum = xs[index] + ys[ptr];
+            if (seen[sum])
+                continue;
+            seen[sum] = true;
             sums.push_back(std::make_pair(xs[index] + ys[ptr], std::make_pair(index, ptr)));
         }
     }
@@ -291,7 +325,7 @@ int main(int argc, char** argv) {
         return left.first < right.first;
     });
     
-    assert(sums.size() == MAX_N * MAX_N);
+    // assert(sums.size() == MAX_N * MAX_N);
     cdf = util::buildCdf<sumCoord>(sums);
     std::cerr << "cdf size = " << cdf.size() << std::endl;
     
