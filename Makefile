@@ -1,2 +1,2 @@
-main: main.cpp util.hpp 
-	g++ -O3 main.cpp -o main
+algo: algorithm.cpp util.hpp 
+	g++ -O3 algorithm.cpp -o algo
