@@ -1,4 +1,4 @@
-Usage: [./algo] [option: 2 - CDF, 1 - std::sort] [MAX_N] [MAX_VALUE]
+Usage: [./algo] [option: 0 - std::sort, 2 - CDF] [MAX_N] [MAX_VALUE]
 
 ./algo 2 2000 10000000
 Solving with CDF approximation took: 14 ms
