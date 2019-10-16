@@ -1,0 +1,30 @@
+./algo 2 2000 10000000
+Solving with CDF approximation took: 14 ms
+CDF approximation (preprocessing + solve) took: 3018 ms
+Is cdf? 1
+
+./algo 0 2000 10000000
+Solving with Sorting took: 413 ms
+Sorting (preprocessing + solve) took: 1004 ms
+Is cdf? 1
+
+./algo 2 3000 10000000
+Solving with CDF approximation took: 22 ms
+CDF approximation (preprocessing + solve) took: 6147 ms
+Is cdf? 1
+
+./algo 0 3000 10000000
+Solving with Sorting took: 817 ms
+Sorting (preprocessing + solve) took: 1850 ms
+Is cdf? 1
+
+./algo 2 4000 100000000
+Solving with CDF approximation took: 69 ms
+CDF approximation (preprocessing + solve) took: 13753 ms
+Is cdf? 1
+
+./algo 0 4000 100000000
+Solving with Sorting took: 1907 ms
+Sorting (preprocessing + solve) took: 5267 ms
+Is cdf? 1
+
