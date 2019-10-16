@@ -25,9 +25,18 @@ namespace util {
    {
        // Note: the case where arr.size() = 1 is covered
        for (unsigned index = 1; index < arr.size(); ++index)
-            if (!(arr[index].first > arr[index - 1].first))
+            if (!(arr[index - 1].first < arr[index].first))
                 return false;
         return true;
+   }
+   
+   static bool is_cdf(std::vector<uint32_t>& xs, std::vector<uint32_t>& ys, std::vector<cdf_coord>& arr) 
+   // Test for cdf
+   {
+       assert(("CDF is empty", !arr.empty()));
+       if (!is_sorted(arr))
+           return false;
+       return arr.back().second == (xs.size() * ys.size());
    }
 	
    static double interpolate(const std::vector<Coord> &spline, double pos)
@@ -46,6 +55,7 @@ namespace util {
       return (iter - 1)->second + ofs * (dy / dx);
    }
    
+#if 0
    static Errors computeErrors(const std::vector<Coord>& cdf, const std::vector<Coord>& spline)
    // returns the average and maximum errors
    {
@@ -181,6 +191,7 @@ namespace util {
       }
       return cdf;
    }
+#endif
 };
 
 #endif // UTIL_H
