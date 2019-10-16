@@ -7,10 +7,29 @@
 
 namespace util {
 	// For polynomial search
-	using sumCoord = std::pair<uint32_t, std::pair<uint32_t, uint32_t>>;
+	using cdf_coord = std::pair<uint32_t, uint32_t>;
+    using sumCoord = std::pair<uint32_t, std::pair<uint32_t, uint32_t>>;
 	using Coord = std::pair<double, double>;
 	using Errors = std::pair<double, double>; // could also be changed to support relative error
 
+   static void printComputedCdf(const char* msg, std::vector<cdf_coord>& cdf)
+   {
+       std::cout << msg << std::endl;
+       for (auto elem: cdf)
+            std::cout << "(" << elem.first << ", " << elem.second << ")" << std::endl;
+       std::cout << std::endl;
+   }
+	
+   static bool is_sorted(std::vector<cdf_coord>& arr)
+   // Test for order
+   {
+       // Note: the case where arr.size() = 1 is covered
+       for (unsigned index = 1; index < arr.size(); ++index)
+            if (!(arr[index].first > arr[index - 1].first))
+                return false;
+        return true;
+   }
+	
    static double interpolate(const std::vector<Coord> &spline, double pos)
    // evaluate the linear function found on spline for "pos"
    {
