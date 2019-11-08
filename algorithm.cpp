@@ -15,23 +15,25 @@
 #define TEST 3
 //-------------------------------------------------------------
 using namespace std::chrono;
-using hash_coord = std::pair<uint32_t, bool>;
+using hash_coord = std::pair<uint64_t, bool>;
 using cdf_coord = util::cdf_coord;
 using sumCoord = util::sumCoord;
 using Coord = util::Coord;
 //-------------------------------------------------------------
 static uint32_t OPTION;
-static uint32_t MAX_VALUE;
-static uint32_t DEVIATION;
+static uint64_t MAX_VALUE;
+static uint64_t DEVIATION;
 static uint32_t MAX_N;
+static uint64_t MAX_DIST_X;
+static uint64_t MAX_DIST_Y;
 //-------------------------------------------------------------
-static std::vector<uint32_t> generator(bool deviate = false)
+static std::vector<uint64_t> generator(uint64_t maxDist)
 // generates a sorted array of MAX_N unsigned ints without duplicates
 {
-    std::vector<uint32_t> ret(MAX_N);
-    std::unordered_map<uint32_t, bool> seen;
+    std::vector<uint64_t> ret(MAX_N);
+#if 0
     for (unsigned index = 0; index < MAX_N; ++index) {
-        uint32_t value;
+        uint64_t value;
         do {
            value = rand() % MAX_VALUE + 1 + deviate * DEVIATION; 
         } while (seen[value]);
@@ -39,39 +41,45 @@ static std::vector<uint32_t> generator(bool deviate = false)
         ret[index] = value;
     }
     std::sort(ret.begin(), ret.end());
+#else
+    ret[0] = rand() % maxDist + 1;
+    for (unsigned index = 1; index < MAX_N; ++index) {
+        ret[index] = ret[index - 1] + rand() % maxDist + 1;
+    }
+#endif
     return ret;
 }
 //-------------------------------------------------------------
-void applyFrequencies(std::unordered_map<uint32_t, hash_coord>& freqHashTable, std::vector<cdf_coord>& cdf)
+void applyFrequencies(std::unordered_map<uint64_t, hash_coord>& freqHashTable, std::vector<cdf_coord>& cdf)
 // Update cdf with the frequencies from the hash table
 {
-    uint32_t partialSum = 0;
+    uint64_t partialSum = 0;
     for (unsigned index = 0, limit = cdf.size(); index < limit; ++index) {
-        uint32_t currSum = freqHashTable[cdf[index].first].first;
+        uint64_t currSum = freqHashTable[cdf[index].first].first;
         partialSum += currSum;
         cdf[index].second = partialSum;
     }
 }
 //-------------------------------------------------------------
-std::unordered_map<uint32_t, hash_coord> computeFreqHashTable(std::vector<uint32_t>& xs, std::vector<uint32_t>& ys) 
+std::unordered_map<uint64_t, hash_coord> computeFreqHashTable(std::vector<uint64_t>& xs, std::vector<uint64_t>& ys) 
 // Return the hash table with the frequencies of the resulted sums
 // This is used by all algorithms
 {
     // Hash with the frequencies of each sum
     assert(xs.size() == ys.size());
-    std::unordered_map<uint32_t, hash_coord> count_;
+    std::unordered_map<uint64_t, hash_coord> count_;
     for (unsigned index = 0; index < xs.size(); ++index) {
         for (unsigned ptr = 0; ptr < ys.size(); ++ptr) {
             // TODO: assuming that the value is still a 32-bit unsigned value
             // This serves only to the theoretical part of the algorithm
-            uint32_t sum = xs[index] + ys[ptr];
+            uint64_t sum = xs[index] + ys[ptr];
             ++count_[sum].first;
         }
     }
     return count_;
 }
 //-------------------------------------------------------------
-std::vector<cdf_coord> preprocessing_sorting(std::unordered_map<uint32_t, hash_coord>& count_, std::vector<uint32_t>& xs, std::vector<uint32_t>& ys)
+std::vector<cdf_coord> preprocessing_sorting(std::unordered_map<uint64_t, hash_coord>& count_, std::vector<uint64_t>& xs, std::vector<uint64_t>& ys)
 // Solve the task with sorting
 {
     std::vector<cdf_coord> final_(count_.size());
@@ -92,13 +100,13 @@ void solveWithSorting(std::vector<cdf_coord>& cdf)
 }
 //-------------------------------------------------------------
 typedef struct {
-    uint32_t sum, next;
+    uint64_t sum, next;
 } cell;
 //-------------------------------------------------------------
-std::vector<uint32_t> adj;
+std::vector<uint64_t> adj;
 std::vector<cell> list;
 //-------------------------------------------------------------
-void addToChain(uint32_t ptr, uint32_t sum, uint32_t index)
+void addToChain(uint64_t ptr, uint64_t sum, uint64_t index)
 // add in the hash-table the sum
 {
     list[ptr].sum = sum;
@@ -106,16 +114,16 @@ void addToChain(uint32_t ptr, uint32_t sum, uint32_t index)
     adj[index] = ptr;
 }
 //-------------------------------------------------------------
-std::vector<uint32_t> collectChain(uint32_t index) 
+std::vector<uint64_t> collectChain(uint64_t index) 
 // Collect the chain into a vector
 {
-    std::vector<uint32_t> ret;
+    std::vector<uint64_t> ret;
     for (uint32_t ptr = adj[index]; ptr; ptr = list[ptr].next)
         ret.push_back(list[ptr].sum);
     return ret;
 }
 //-------------------------------------------------------------
-std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint32_t, hash_coord>& count_, std::vector<uint32_t>& xs, std::vector<uint32_t>& ys)
+std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint64_t, hash_coord>& count_, std::vector<uint64_t>& xs, std::vector<uint64_t>& ys)
 // Solve with the cdf approximation
 {
     // Construct an artificial spline
@@ -124,7 +132,7 @@ std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint32_t, hash_coord
     for (unsigned index = 0; index < xs.size(); ++index)
         spline[index].first = xs[index] + ys[index];
     
-    auto forward_pointer = [&spline](uint32_t& knotPtr, uint32_t sum) {
+    auto forward_pointer = [&spline](uint32_t& knotPtr, uint64_t sum) {
         // Iterate through the spline knots and find the segment of sum
         while ((knotPtr < spline.size()) && (spline[knotPtr].first <= sum))
             ++knotPtr;
@@ -141,7 +149,7 @@ std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint32_t, hash_coord
         for (unsigned ptr = 0; ptr < ys.size(); ++ptr) {
             // TODO: assuming that the value is still a 32-bit unsigned value
             // This serves only to the theoretical part of the algorithm
-            uint32_t sum = xs[index] + ys[ptr];
+            uint64_t sum = xs[index] + ys[ptr];
             
             // Forward the pointer in the spline knots
             forward_pointer(knotPtr, sum);
@@ -164,7 +172,7 @@ std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint32_t, hash_coord
         std::cerr << elem.first << " " << elem.second << std::endl;
 #endif
     
-    auto interpolate = [&spline](uint32_t knotPtr, uint32_t sum) {
+    auto interpolate = [&spline](uint32_t knotPtr, uint64_t sum) {
         // Compute the slope
         double dx = spline[knotPtr].first - spline[knotPtr - 1].first;
         double dy = spline[knotPtr].second - spline[knotPtr - 1].second;
@@ -190,7 +198,7 @@ std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint32_t, hash_coord
         for (unsigned ptr = 0; ptr < ys.size(); ++ptr) {
             // TODO: assuming that the value is stil a 32-bit unsigned value
             // This serves only to the theoretical part of the algorithm
-            uint32_t sum = xs[index] + ys[ptr];
+            uint64_t sum = xs[index] + ys[ptr];
             
             // Forward the pointer in the spline knots
             forward_pointer(knotPtr, sum);
@@ -214,23 +222,24 @@ std::vector<cdf_coord> preprocessing_cdf(std::unordered_map<uint32_t, hash_coord
     unsigned currBuffer = 0;
     std::vector<cdf_coord> final_(sums_counter);
     
-    auto addKeyToFinal = [&final_, &currBuffer](uint32_t key) {
+    auto addKeyToFinal = [&final_, &currBuffer](uint64_t key) {
         final_[currBuffer++] = std::make_pair(key, 0);
     };
     
-    auto addChain = [addKeyToFinal](std::vector<uint32_t>& values) {
+    auto addChain = [addKeyToFinal](std::vector<uint64_t>& values) {
         for (auto elem: values)
             addKeyToFinal(elem);
     };
     
     // Go through the chains from the hash-table
-    std::vector<uint32_t> collector_;
+    std::vector<uint64_t> collector_;
     for (unsigned index = 0; index < sums_size; ++index) {
         // TODO: try also with sorting the chain
         collector_ = collectChain(index);
         // And insert each element of the chain
         addChain(collector_);
     }
+    std::cerr << "Sums = " << sums_size << std::endl;
 #if 0
     std::cerr << currBuffer << " vs " << sums_size << std::endl;
     assert(currBuffer == sums_size);
@@ -271,21 +280,37 @@ std::vector<cdf_coord> chooseAlgorithm(uint32_t option)
     std::vector<cdf_coord> ret;
     
     // Create the input
-    std::vector<uint32_t> xs = generator(true);
-    std::vector<uint32_t> ys = generator();
+    std::vector<uint64_t> xs = generator(MAX_DIST_X);
+    std::vector<uint64_t> ys = generator(MAX_DIST_Y);
     
-    auto printVector = [&](std::string msg, const std::vector<uint32_t>& arr) {
+    auto printVector = [&](std::string msg, const std::vector<uint64_t>& arr) {
         std::cout << msg << std::endl;
         for (auto v : arr)
             std::cout << v << " ";
         std::cout << std::endl;
     };
 
-    std::unordered_map<uint32_t, hash_coord> count_ = computeFreqHashTable(xs, ys);
+#if 0
+    printVector("X", xs);
+    printVector("Y", ys);
+#endif
+    
+    std::unordered_map<uint64_t, hash_coord> count_ = computeFreqHashTable(xs, ys);
     
     // Analyze options
     switch (option) {
         // Sort with a comparison-based sorting algorithm (N^2 log N)
+        // Sort with radix sort (N ^ 2)
+        case RADIX : {
+            assert(("Radix not yet supported", 0));
+#if 0
+            cdf = solveWithRadix(xs, ys);
+#endif
+            break;
+        }
+        case TEST : {
+            std::cerr << "Testing" << std::endl;
+        }
         case SORTING : {
 #if 1
             auto start = high_resolution_clock::now();
@@ -295,15 +320,8 @@ std::vector<cdf_coord> chooseAlgorithm(uint32_t option)
             auto stop = high_resolution_clock::now();
             std::cout << "Sorting (preprocessing + solve) took: " << duration_cast<milliseconds>(stop - start).count() << " ms" << std::endl;
 #endif
-            break;
-        }
-        // Sort with radix sort (N ^ 2)
-        case RADIX : {
-            assert(("Radix not yet supported", 0));
-#if 0
-            cdf = solveWithRadix(xs, ys);
-#endif
-            break;
+            if (option != TEST)
+                break;
         }
         // Sort with the CDF approximation (N ^ 2)
         case CDF : {
@@ -314,15 +332,6 @@ std::vector<cdf_coord> chooseAlgorithm(uint32_t option)
             auto stop = high_resolution_clock::now();
             std::cout << "CDF approximation (preprocessing + solve) took: " << duration_cast<milliseconds>(stop - start).count() << " ms" << std::endl;
             break;
-        }
-        // Sort with all the above options
-        case TEST : {
-            assert(("Testing not yet supported", 0));
-#if 0
-            cdf = solveWithSorting(xs, ys);
-            cdf = solveWithRadix(xs, ys);
-            cdf = solveWithCdf(xs, ys);
-#endif
         }
         default : {
             std::cerr << "Option " << option << " not (yet) available" << std::endl;
@@ -338,15 +347,15 @@ std::vector<cdf_coord> chooseAlgorithm(uint32_t option)
 int main(int argc, char** argv) {
     srand(time(NULL));
     
-    if ((argc != 4) && (argc != 5)) {
-        std::cerr << "Usage: " << argv[0] << " [OPTION] [MAX_N] [MAX_VALUE] [optional: DEVIATION - default: 0]" << std::endl;
+    if (argc != 5) {
+        std::cerr << "Usage: " << argv[0] << " [OPTION] [MAX_N] [MAX_DIST_X] [MAX_DIST_Y]" << std::endl;
         return -1;
     }
     
     OPTION = atoi(argv[1]);
     MAX_N = atoi(argv[2]);
-    MAX_VALUE = atoi(argv[3]);
-    DEVIATION = (argc == 5) ? atoi(argv[4]) : 0;
+    MAX_DIST_X = atoi(argv[3]);
+    MAX_DIST_Y = atoi(argv[4]);
 
     std::vector<cdf_coord> ret = chooseAlgorithm(OPTION);
 #if 0
