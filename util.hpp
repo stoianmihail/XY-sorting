@@ -7,8 +7,8 @@
 
 namespace util {
 	// For polynomial search
-	using cdf_coord = std::pair<uint32_t, uint32_t>;
-    using sumCoord = std::pair<uint32_t, std::pair<uint32_t, uint32_t>>;
+	using cdf_coord = std::pair<uint64_t, uint64_t>;
+    using sumCoord = std::pair<uint64_t, std::pair<uint64_t, uint64_t>>;
 	using Coord = std::pair<double, double>;
 	using Errors = std::pair<double, double>; // could also be changed to support relative error
 
@@ -30,7 +30,7 @@ namespace util {
         return true;
    }
    
-   static bool is_cdf(std::vector<uint32_t>& xs, std::vector<uint32_t>& ys, std::vector<cdf_coord>& arr) 
+   static bool is_cdf(std::vector<uint64_t>& xs, std::vector<uint64_t>& ys, std::vector<cdf_coord>& arr) 
    // Test for cdf
    {
        assert(("CDF is empty", !arr.empty()));
@@ -55,7 +55,6 @@ namespace util {
       return (iter - 1)->second + ofs * (dy / dx);
    }
    
-#if 0
    static Errors computeErrors(const std::vector<Coord>& cdf, const std::vector<Coord>& spline)
    // returns the average and maximum errors
    {
@@ -191,7 +190,6 @@ namespace util {
       }
       return cdf;
    }
-#endif
 };
 
 #endif // UTIL_H
