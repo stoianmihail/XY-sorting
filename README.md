@@ -14,5 +14,6 @@ Milestones:
 3) Try to supress the duplicates in the CDF of X + Y, by using a hash-table. In this way, we obtain the final order faster and in a more comfortable way.
 4) Because the spline itself has approximation errors, we can regard the estimation as a hash function. By creating a hash table based on that, it only remains to sort the estimated order with insertion sort.
 5) Even though the preprocessing step of the CDF approximation has a theoretical bound of O(N ^ 2) complexity, it runs very slow. Because of that, we only take into account the execution times of sorting the estimated CDF.
+6) The generator of X and Y is now based on the maximum distance between the elements. Apparently, this approach outperforms the trivial sorting one if the ratio between maxDistance(X) and maxDistance(Y) is lower than 150. 
 
 Within the benchmark, we compare the execution times for getting the CDF of X + Y, by providing a preprocessing of a hash table (sum, count in X + Y), which is visible to all competitors. 
