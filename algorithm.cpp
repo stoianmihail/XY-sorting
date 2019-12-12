@@ -1,5 +1,9 @@
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
+#include <iostream>
+#include <random>
+#include <vector>
 #include <cmath>
 #include <ctime>
 #include <vector>
@@ -7,6 +11,7 @@
 #include <algorithm>
 #include <cassert>
 #include <chrono>
+#include <boost/lexical_cast.hpp>
 #include "util.hpp"
 //-------------------------------------------------------------
 #define SORTING 0
@@ -24,30 +29,23 @@ static uint32_t OPTION;
 static uint64_t MAX_VALUE;
 static uint64_t DEVIATION;
 static uint32_t MAX_N;
-static uint64_t MAX_DIST_X;
-static uint64_t MAX_DIST_Y;
+static uint64_t MAX_VALUE_X;
+static uint64_t MAX_VALUE_Y;
 //-------------------------------------------------------------
-static std::vector<uint64_t> generator(uint64_t maxDist)
+auto randomNumberBetween = [](uint64_t low, uint64_t high) {
+    auto randomFunc = [distribution_ = std::uniform_int_distribution<uint64_t>(low, high), random_engine_ = std::mt19937{std::random_device{}()}]() mutable {
+        return distribution_(random_engine_);
+    };
+    return randomFunc;
+};
+//-------------------------------------------------------------
+static std::vector<uint64_t> generator(uint64_t maxValue)
 // generates a sorted array of MAX_N unsigned ints without duplicates
 {
-    std::vector<uint64_t> ret(MAX_N);
-#if 0
-    for (unsigned index = 0; index < MAX_N; ++index) {
-        uint64_t value;
-        do {
-           value = rand() % MAX_VALUE + 1 + deviate * DEVIATION; 
-        } while (seen[value]);
-        seen[value] = true;
-        ret[index] = value;
-    }
-    std::sort(ret.begin(), ret.end());
-#else
-    ret[0] = rand() % maxDist + 1;
-    for (unsigned index = 1; index < MAX_N; ++index) {
-        ret[index] = ret[index - 1] + rand() % maxDist + 1;
-    }
-#endif
-    return ret;
+    std::vector<uint64_t> numbers;
+    std::generate_n(std::back_inserter(numbers), 10000, randomNumberBetween(1, maxValue));
+    std::sort(std::begin(numbers), std::end(numbers));
+    return numbers;
 }
 //-------------------------------------------------------------
 void applyFrequencies(std::unordered_map<uint64_t, hash_coord>& freqHashTable, std::vector<cdf_coord>& cdf)
@@ -280,8 +278,8 @@ std::vector<cdf_coord> chooseAlgorithm(uint32_t option)
     std::vector<cdf_coord> ret;
     
     // Create the input
-    std::vector<uint64_t> xs = generator(MAX_DIST_X);
-    std::vector<uint64_t> ys = generator(MAX_DIST_Y);
+    std::vector<uint64_t> xs = generator(MAX_VALUE_X);
+    std::vector<uint64_t> ys = generator(MAX_VALUE_Y);
     
     auto printVector = [&](std::string msg, const std::vector<uint64_t>& arr) {
         std::cout << msg << std::endl;
@@ -348,15 +346,19 @@ int main(int argc, char** argv) {
     srand(time(NULL));
     
     if (argc != 5) {
-        std::cerr << "Usage: " << argv[0] << " [OPTION] [MAX_N] [MAX_DIST_X] [MAX_DIST_Y]" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [OPTION] [MAX_N] [MAX_VALUE_X] [MAX_VALUE_Y]" << std::endl;
         return -1;
     }
     
     OPTION = atoi(argv[1]);
     MAX_N = atoi(argv[2]);
-    MAX_DIST_X = atoi(argv[3]);
-    MAX_DIST_Y = atoi(argv[4]);
+    double d = boost::lexical_cast<double>(argv[3]);
+    MAX_VALUE_X = static_cast<uint64_t>(d);
+    d = boost::lexical_cast<double>(argv[4]);
+    MAX_VALUE_Y = static_cast<uint64_t>(d);
 
+    std::cerr << "check " << MAX_VALUE_X << " and " << MAX_VALUE_Y << std::endl;
+    
     std::vector<cdf_coord> ret = chooseAlgorithm(OPTION);
 #if 0
     printVector("X", xs);
